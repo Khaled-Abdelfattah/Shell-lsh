@@ -26,6 +26,7 @@ int lsh_exit(char **args);
 int lsh_echo(char **args);
 int lsh_history(char **args);
 int lsh_pwd(char **args);
+int lsh_env(char **args);
 
 /*
   List of builtin commands, followed by their corresponding functions.
@@ -36,7 +37,8 @@ char *builtin_str[] = {
     "exit",
     "echo",
     "history",
-    "pwd"
+    "pwd",
+    "env"
   };
 
 int (*builtin_func[])(char **) = {
@@ -45,7 +47,8 @@ int (*builtin_func[])(char **) = {
     &lsh_exit,
     &lsh_echo,
     &lsh_history,
-    &lsh_pwd
+    &lsh_pwd,
+    &lsh_env
   };
 
 int lsh_num_builtins()
@@ -160,6 +163,24 @@ int lsh_pwd(char **args)
     free(cwd);
   } else {
     perror("lsh: pwd");
+  }
+  return 1;
+}
+
+/**
+  @brief Builtin command: env.
+  @param args List of args. args[0] is "env", and we ensure nothing comes after it.
+  @return Always returns 1, to continue executing.
+ */
+int lsh_env(char **args)
+{
+  extern char **environ;
+  if (args[1] != NULL) {
+    fprintf(stderr, "lsh: \"env\" does not take any arguments\n");
+    return 1;
+  }
+  for (char **env = environ; *env != NULL; env++) {
+    printf("%s\n", *env);
   }
   return 1;
 }
