@@ -25,6 +25,7 @@ int lsh_help(char **args);
 int lsh_exit(char **args);
 int lsh_echo(char **args);
 int lsh_history(char **args);
+int lsh_pwd(char **args);
 
 /*
   List of builtin commands, followed by their corresponding functions.
@@ -34,14 +35,18 @@ char *builtin_str[] = {
     "help",
     "exit",
     "echo",
-    "history"};
+    "history",
+    "pwd"
+  };
 
 int (*builtin_func[])(char **) = {
     &lsh_cd,
     &lsh_help,
     &lsh_exit,
     &lsh_echo,
-    &lsh_history};
+    &lsh_history,
+    &lsh_pwd
+  };
 
 int lsh_num_builtins()
 {
@@ -135,6 +140,27 @@ int lsh_echo(char **args)
     i++;
   }
   printf("\n");
+  return 1;
+}
+
+/** 
+  @brief Builtin command: pwd.
+  @param args List of args. args[0] is "pwd", and we ensure nothing comes after it.
+  @return Always returns 1, to continue executing.
+*/
+int lsh_pwd(char **args)
+{
+  if (args[1] != NULL) {
+    fprintf(stderr, "lsh: \"pwd\" does not take any arguments\n");
+    return 1;
+  }
+  char *cwd = getcwd(NULL, 0);
+  if (cwd != NULL) {
+    printf("%s\n", cwd);
+    free(cwd);
+  } else {
+    perror("lsh: pwd");
+  }
   return 1;
 }
 
