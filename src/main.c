@@ -81,7 +81,7 @@ int lsh_cd(char **args)
   return 1;
 }
 
-const int MAX = 1000;
+#define MAX 1000
 char *his_list[MAX];
 int his_cnt = 0;
 
@@ -406,6 +406,7 @@ void lsh_loop(void)
   {
     printf("> ");
     line = lsh_read_line();
+    add_history(line);
     args = lsh_split_line(line);
     status = lsh_execute(args);
 
