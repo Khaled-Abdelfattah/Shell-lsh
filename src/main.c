@@ -38,8 +38,7 @@ char *builtin_str[] = {
     "echo",
     "history",
     "pwd",
-    "env"
-  };
+    "env"};
 
 int (*builtin_func[])(char **) = {
     &lsh_cd,
@@ -48,8 +47,7 @@ int (*builtin_func[])(char **) = {
     &lsh_echo,
     &lsh_history,
     &lsh_pwd,
-    &lsh_env
-  };
+    &lsh_env};
 
 int lsh_num_builtins()
 {
@@ -84,10 +82,10 @@ int lsh_cd(char **args)
 #define MAX 1000
 char *his_list[MAX];
 int his_cnt = 0;
-
 void add_history(const char *line)
 {
-  if (line == NULL) return;
+  if (line == NULL)
+    return;
   char *line_clean = strdup(line);
   line_clean[strcspn(line_clean, "\r\n")] = 0;
   int is_empty = 1;
@@ -120,7 +118,6 @@ void add_history(const char *line)
     his_list[MAX - 1] = line_clean;
   }
 }
-
 int lsh_history(char **args)
 {
   for (int i = 0; i < his_cnt; i++)
@@ -146,22 +143,26 @@ int lsh_echo(char **args)
   return 1;
 }
 
-/** 
+/**
   @brief Builtin command: pwd.
   @param args List of args. args[0] is "pwd", and we ensure nothing comes after it.
   @return Always returns 1, to continue executing.
 */
 int lsh_pwd(char **args)
 {
-  if (args[1] != NULL) {
+  if (args[1] != NULL)
+  {
     fprintf(stderr, "lsh: \"pwd\" does not take any arguments\n");
     return 1;
   }
   char *cwd = getcwd(NULL, 0);
-  if (cwd != NULL) {
+  if (cwd != NULL)
+  {
     printf("%s\n", cwd);
     free(cwd);
-  } else {
+  }
+  else
+  {
     perror("lsh: pwd");
   }
   return 1;
@@ -175,11 +176,13 @@ int lsh_pwd(char **args)
 int lsh_env(char **args)
 {
   extern char **environ;
-  if (args[1] != NULL) {
+  if (args[1] != NULL)
+  {
     fprintf(stderr, "lsh: \"env\" does not take any arguments\n");
     return 1;
   }
-  for (char **env = environ; *env != NULL; env++) {
+  for (char **env = environ; *env != NULL; env++)
+  {
     printf("%s\n", *env);
   }
   return 1;
